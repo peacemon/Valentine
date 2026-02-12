@@ -1,210 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>💖 For Mamakhe 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Mamakhe 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- 🔔 EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-(function(){
-  emailjs.init("c3|sztqgd8_Adkzie");
-})();
-</script>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("c3Isztqgd8_Adkzie");
+    })();
+  </script>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
-  color: white;
-  overflow: hidden;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      text-align: center;
+      color: #fff;
+    }
 
-.card {
-  max-width: 360px;
-  margin: 15vh auto;
-  background: rgba(255,255,255,0.15);
-  padding: 25px;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
+    .container {
+      padding: 30px;
+    }
 
-button {
-  background: white;
-  color: #ff4f81;
-  border: none;
-  padding: 12px 20px;
-  margin: 10px;
-  border-radius: 25px;
-  font-size: 1em;
-  cursor: pointer;
-}
+    h1, p {
+      margin: 20px;
+    }
 
-.hearts span {
-  position: absolute;
-  bottom: -20px;
-  font-size: 20px;
-  animation: float 6s infinite ease-in;
-  opacity: 0.7;
-}
+    button {
+      font-size: 18px;
+      padding: 15px 30px;
+      border-radius: 30px;
+      border: none;
+      margin: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-@keyframes float {
-  0% { transform: translateY(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translateY(-100vh); opacity: 0; }
-}
+    .yes {
+      background: #ff4d6d;
+      color: white;
+    }
 
-.collage {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
+    .no {
+      background: #555;
+      color: white;
+    }
 
-.collage img {
-  width: 100%;
-  border-radius: 10px;
-}
-</style>
+    #collage {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      padding: 20px;
+    }
+
+    #collage img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .confirmation {
+      background: rgba(0,0,0,0.5);
+      padding: 30px;
+      border-radius: 20px;
+      margin: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
-<audio id="music" loop>
+<audio autoplay loop>
   <source src="emlanjeni.mp3" type="audio/mpeg">
 </audio>
 
-<div class="hearts" id="hearts"></div>
+<div class="container">
+  <h1 id="question">Hey Mamakhe 💕</h1>
+  <p id="message">I have a few questions for you…</p>
 
-<div class="card" id="content">
-  <h1>Hey Mamakhe 💕</h1>
-  <p>I made something just for you…</p>
-  <p id="countdown"></p>
-  <button onclick="start()">Start 😌</button>
+  <div id="buttons">
+    <button class="yes" id="yesBtn" onclick="yes()">Yes ❤️</button>
+    <button class="no" id="noBtn" onclick="no()">No 🙈</button>
+  </div>
+</div>
+
+<div id="collage" class="hidden"></div>
+
+<div id="confirmation" class="confirmation hidden">
+  <h2>💖 Reservation Confirmed 💖</h2>
+  <p><strong>Name:</strong> Mamakhe</p>
+  <p><strong>Date:</strong> 21 February</p>
+  <p><strong>Status:</strong> Romantic Dinner for Two ✨</p>
+  <p>I can’t wait to celebrate love with you ❤️</p>
 </div>
 
 <script>
-const content = document.getElementById("content");
-const hearts = document.getElementById("hearts");
-const music = document.getElementById("music");
+  let step = 0;
+  let noScale = 1;
+  let yesLocked = false;
 
-let alreadyConfirmed = false;
-let noBtn;
-
-// 💕 Floating hearts
-function makeHearts() {
-  setInterval(() => {
-    const heart = document.createElement("span");
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = 4 + Math.random() * 4 + "s";
-    hearts.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }, 500);
-}
-
-// 📸 Auto-load photos
-function generateCollage(maxPhotos = 50) {
-  let html = '<div class="collage">';
-  for (let i = 1; i <= maxPhotos; i++) {
-    html += `<img src="photo${i}.jpg" onerror="this.style.display='none'">`;
-  }
-  html += '</div>';
-  return html;
-}
-
-// ▶️ Start
-function start() {
-  music.play();
-  makeHearts();
-  question1();
-}
-
-function question1() {
-  content.innerHTML = `
-    <h1>Question 💭</h1>
-    <p>Do I make you smile?</p>
-    <button onclick="question2()">Yes 😊</button>
-  `;
-}
-
-function question2() {
-  content.innerHTML = `
-    <h1>Almost 😳</h1>
-    <p>Do you know how much I care about you?</p>
-    <button onclick="finalQuestion()">Yes 💕</button>
-  `;
-}
-
-function finalQuestion() {
-  content.innerHTML = `
-    <h1>Mamakhe… 💝</h1>
-    <p>Will you be my Valentine?</p>
-    <button onclick="yes()">YES ❤️</button>
-    <button id="noBtn" onmouseover="runAway()">No 🙈</button>
-  `;
-  noBtn = document.getElementById("noBtn");
-}
-
-// 😏 No button runs away
-function runAway() {
-  noBtn.style.position = "absolute";
-  noBtn.style.left = Math.random() * 70 + "%";
-  noBtn.style.top = Math.random() * 70 + "%";
-}
-
-// ❤️ YES action
-function yes() {
-  if (alreadyConfirmed) return;
-  alreadyConfirmed = true;
-
-  // 📩 Email notification
-  emailjs.send(
-    "service_cl9xy5d",
-    "template_o196jg2",
+  const questions = [
     {
-      message: "Mamakhe said YES ❤️ Dinner for 21 February is confirmed."
+      q: "Do I make you happy? 💕",
+      msg: "Your smile means everything to me."
+    },
+    {
+      q: "Are you ready to bring a life into this world? 👶❤️",
+      msg: "Together, with love and courage."
+    },
+    {
+      q: "Will you be my Valentine? 💘",
+      msg: "Forever starts with this moment."
     }
-  );
+  ];
 
-  // 💬 WhatsApp auto-message
-  window.location.href =
-    "https://wa.me/?text=" +
-    encodeURIComponent("YES 💖 I’ll be your Valentine 😍");
+  function yes() {
+    if (yesLocked && step === questions.length - 1) return;
 
-  // 🍽️ Fake reservation confirmation
-  content.innerHTML = `
-    <h1>Reservation Confirmed ✅</h1>
-    <p>Thank you for confirming your reservation.</p>
+    if (step < questions.length - 1) {
+      step++;
+      document.getElementById("question").innerText = questions[step].q;
+      document.getElementById("message").innerText = questions[step].msg;
+    } else {
+      yesLocked = true;
+      document.getElementById("yesBtn").disabled = true;
+      document.getElementById("noBtn").style.display = "none";
+      showCelebration();
+      sendEmail();
+    }
+  }
 
-    <div style="background:rgba(255,255,255,0.2);padding:15px;border-radius:12px;text-align:left;">
-      <p><strong>Name:</strong> Mamakhe</p>
-      <p><strong>Occasion:</strong> Valentine’s Dinner 💖</p>
-      <p><strong>Date:</strong> 21 February</p>
-      <p><strong>Time:</strong> 19:00</p>
-      <p><strong>Status:</strong> Confirmed</p>
-      <p><strong>Reference:</strong> VD-2102</p>
-    </div>
+  function no() {
+    noScale -= 0.1;
+    document.getElementById("noBtn").style.transform = `scale(${noScale})`;
+  }
 
-    <p style="margin-top:15px;">We look forward to hosting you 🍽️✨</p>
+  function showCelebration() {
+    document.getElementById("question").innerText = "She said YES 💖";
+    document.getElementById("message").innerText = "This is our love story.";
+    document.getElementById("buttons").style.display = "none";
 
-    ${generateCollage()}
+    const collage = document.getElementById("collage");
+    collage.classList.remove("hidden");
 
-    <p style="margin-top:15px;">Happy Valentine’s Day 💐❤️</p>
-  `;
-}
+    const totalPhotos = 20;
+    for (let i = 1; i <= totalPhotos; i++) {
+      const img = document.createElement("img");
+      img.src = `photo${i}.jpg`;
+      collage.appendChild(img);
+    }
 
-// ⏳ Countdown
-const valentines = new Date(new Date().getFullYear(), 1, 14);
-setInterval(() => {
-  const now = new Date();
-  const diff = valentines - now;
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  document.getElementById("countdown").innerText =
-    days > 0 ? days + " days until Valentine’s Day 💘" : "";
-}, 1000);
+    document.getElementById("confirmation").classList.remove("hidden");
+  }
+
+  function sendEmail() {
+    emailjs.send(
+      "service_cl9xy5d",
+      "template_o196jg2",
+      {
+        message: "Mamakhe said YES ❤️ Dinner for 21 February is confirmed."
+      }
+    );
+  }
 </script>
 
 </body>
